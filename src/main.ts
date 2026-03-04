@@ -1,24 +1,28 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { createAppScene } from "./scene/scene";
+import { createSun } from "./objects/sun";
+import { createEarth } from "./objects/earth";
+import { createMoon } from "./objects/moon";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+const { scene, camera, renderer } = createAppScene();
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const sun = createSun();
+scene.add(sun);
+
+const earth = createEarth();
+earth.position.x = 5;
+scene.add(earth);
+
+const moon = createMoon();
+moon.position.x = 1.5;
+earth.add(moon);
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    earth.rotation.y += 0.01;
+    moon.rotation.y += 0.03;
+
+    renderer.render(scene, camera);
+}
+
+animate();
